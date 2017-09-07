@@ -4,18 +4,18 @@
 
 Higawari is a Discord bot for organizing challenges, i.e. translation challenges. Participants submit answers to the bot in DM, then the bot publishes the answers in the specified server channel shuffled and without names.
 
-# Requirements
+## Requirements
 
 * Node.js 8+
 * MongoDB
 
-# Installation
+## Installation
 
 ```sh
 npm install -g higawari
 ```
 
-# Usage
+## Usage
 
 Higawari uses environment variables for configuration.
 
@@ -30,7 +30,7 @@ HIGAWARI_TOKEN=aaaaaaaaaaaaaaaaaaaaaaaa.bbbbbb.ccccccccccccccccccccccccccc HIGAW
 
 If configured correctly `>help` command in the mod channel will print help.
 
-# License
+## License
 
 The MIT License (MIT)
 
