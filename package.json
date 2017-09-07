@@ -1,0 +1,25 @@
+{
+  "name": "higawari",
+  "version": "1.0.0",
+  "description": "Discord bot for organizing challenges",
+  "main": "index.js",
+  "bin": {
+    "higawari": "./index.js"
+  },
+  "author": "Alexey Komarov <alex7kom@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babelfish": "^1.1.2",
+    "discord.js": "^11.2.1",
+    "lodash.shuffle": "^4.2.0",
+    "mongodb": "^2.2.31",
+    "winston": "^2.3.1"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alex7Kom/higawari.git"
+  }
+}
