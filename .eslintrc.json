@@ -74,7 +74,7 @@
     "max-len": "warn",
     "max-nested-callbacks": "error",
     "max-params": ["warn", 5],
-    "max-statements": "warn",
+    "max-statements": "off",
     "max-statements-per-line": "error",
     "new-cap": "error",
     "new-parens": "error",
