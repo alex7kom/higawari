@@ -7,7 +7,7 @@
   "stoppedMod": "The challenge is over. The submissions are shown below. Remove the ones you don't want to be published.",
   "reset": "The reset is finished. We are now ready for a new challenge!",
   "notPublished": "The submissions for the current challenge are not published yet",
-  "results": "The submissions for the challenge are here! Thanks to all participated.",
+  "results": "The submissions for the challenge are here! Thanks to all who participated.",
   "replyNoChallenge": "Sorry, no active challenges.",
   "replyError": "There was an error accepting your submission. Please try again.",
   "replyHelp": "Hello! Please type `submit` to start. You'll be asked for your answer for the challenge. You can update your submission at any time before the deadline by sending `submit` again.",
