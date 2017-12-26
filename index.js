@@ -207,7 +207,8 @@ async function handleDirectMessage (msg) {
             part: user.part
           }, query),
           {
-            content: msg.content
+            content: msg.content,
+            submittedAt: new Date()
           }
         );
       }
