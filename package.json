@@ -1,6 +1,6 @@
 {
   "name": "higawari",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Discord bot for organizing challenges",
   "main": "index.js",
   "bin": {
