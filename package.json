@@ -12,8 +12,8 @@
     "babelfish": "^1.1.2",
     "discord.js": "^11.2.1",
     "lodash.shuffle": "^4.2.0",
-    "mongodb": "^2.2.31",
-    "winston": "^2.3.1"
+    "mongodb": "^2.2.33",
+    "winston": "^2.4.0"
   },
   "keywords": [
     "discord"
