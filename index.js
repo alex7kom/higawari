@@ -94,8 +94,10 @@ client.on('message', handleModMessage);
 client.on('raw', handleMessageDeletion);
 process.on('uncaughtException', handleUncaughtExceptions);
 
-function handleDbConnection (db) {
+function handleDbConnection (dbClient) {
   winston.debug('connected to db');
+
+  const db = dbClient.db();
 
   dbUsers = db.collection('users');
   dbEntries = db.collection('entries');

@@ -10,10 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "babelfish": "^1.1.2",
-    "discord.js": "^11.2.1",
+    "discord.js": "^11.3.2",
     "lodash.shuffle": "^4.2.0",
-    "mongodb": "^2.2.33",
-    "winston": "^2.4.0"
+    "mongodb": "^3.0.8",
+    "winston": "^2.4.2"
   },
   "keywords": [
     "discord"
