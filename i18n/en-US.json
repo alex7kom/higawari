@@ -23,7 +23,7 @@
   "noSubmissions": "No submissions",
   "answerTitle": "The submissions for the Part #{num}",
   "noActiveChallenge": "No active challenges",
-  "resetActiveChallenge": "The challenge is in progress and/or its results are not published. If you want to reset the challenge, please type `>force reset, please. I understand the consequences`. This action can't be undone.",
+  "resetActiveChallenge": "The challenge is in progress and/or its results are not published. If you want to reset the challenge, please type `>force reset, please. i understand the consequences`. This action can't be undone.",
   "stopFirst": "The challenge should be stopped first",
   "statusIdle": "Daily Challenge",
   "statusSubmissions": "((=0 Accepting submissions|#{count} submission|#{count} submissions))",

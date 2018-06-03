@@ -259,7 +259,12 @@ function handleModMessage (msg) {
     return sendHelp();
   }
 
-  if (typeof statusActions[state.status][parts[0]] === 'function') {
+  if (
+    typeof statusActions[state.status][msg.content] === 'function'
+    && statusActions[state.status][msg.content].length === 0
+  ) {
+    statusActions[state.status][msg.content]();
+  } else if (typeof statusActions[state.status][parts[0]] === 'function') {
     statusActions[state.status][parts[0]](parts);
   }
 }
