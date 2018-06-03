@@ -292,16 +292,20 @@ function sendHelp () {
   sendMessage(moderationChannel, getText('help'));
 }
 
-function startChallenge (parts) {
+function startChallenge (messageParts) {
   const newState = {
     status: Status.STARTED,
     currentId: Date.now()
   };
 
-  if (parts[1] && parseInt(parts[1], 10) > 0) {
-    newState.parts = parseInt(parts[1], 10);
+  const parts = parseInt(messageParts[1], 10);
+
+  if (parts > 0) {
+    newState.parts = parts;
   } else {
-    newState.parts = 2;
+    sendMessage(moderationChannel, getText('specifyParts'));
+
+    return;
   }
 
   try {

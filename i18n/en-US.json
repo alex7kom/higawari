@@ -1,6 +1,7 @@
 {
   "started": "The challenge has started. Say hi to me in DM to get submission instructions.",
   "startedMod": "The challenge has started. The number of parts is set to #{num}.",
+  "specifyParts": "Please specify the number of parts.",
   "alreadyStarted": "The challenge is already started.",
   "alreadyStopped": "The challenge is already stopped.",
   "stopped": "The challenge is over. Submissions are no longer accepted.",
