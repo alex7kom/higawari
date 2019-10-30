@@ -9,7 +9,7 @@ const { combine, timestamp, printf } = format;
 const i18n = require('./lib/i18n');
 
 let guildId;
-const isDebug = Boolean(process.env.NODE_ENV !== 'production');
+const isDebug = process.env.NODE_ENV !== 'production';
 const dbUri = process.env.HIGAWARI_DB_URI;
 const token = process.env.HIGAWARI_TOKEN;
 const moderationChannel = process.env.HIGAWARI_MOD_CH;
