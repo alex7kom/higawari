@@ -3,12 +3,13 @@
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;
 const shuffle = require('lodash.shuffle');
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, printf } = format;
 
 const i18n = require('./lib/i18n');
 
 let guildId;
-const isDebug = Boolean(process.env.HIGAWARI_DEBUG);
+const isDebug = Boolean(process.env.NODE_ENV !== 'production');
 const dbUri = process.env.HIGAWARI_DB_URI;
 const token = process.env.HIGAWARI_TOKEN;
 const moderationChannel = process.env.HIGAWARI_MOD_CH;
@@ -76,26 +77,40 @@ let state = {
   parts: 2
 };
 
-if (isDebug) {
-  winston.level = 'debug';
-}
+const logFormat = printf(({ level, message, timestamp }) => {
+  const printedMessage = typeof message === 'string'
+    ? message
+    : JSON.stringify(message);
+
+  return `${timestamp} [${level}]: ${printedMessage}`;
+});
+
+const logger = createLogger({
+  format: combine(
+    timestamp(),
+    logFormat
+  ),
+  transports: [
+    new transports.Console({ level: isDebug ? 'debug' : 'error' })
+  ]
+});
 
 const client = new Discord.Client();
 
 MongoClient
-  .connect(dbUri)
+  .connect(dbUri, { useUnifiedTopology: true })
   .then(handleDbConnection)
   .catch(handleUncaughtExceptions);
 
 client.on('ready', handleClientReady);
-client.on('debug', winston.debug.bind(winston));
+client.on('debug', logger.debug.bind(logger));
 client.on('message', handleDirectMessage);
 client.on('message', handleModMessage);
 client.on('raw', handleMessageDeletion);
 process.on('uncaughtException', handleUncaughtExceptions);
 
 function handleDbConnection (dbClient) {
-  winston.debug('connected to db');
+  logger.debug('connected to db');
 
   const db = dbClient.db();
 
@@ -110,22 +125,22 @@ async function initBot () {
   const stateEntry = await dbState.findOne(
     { _id: 'state' },
     {
-      fields: { _id: 0 }
+      projection: { _id: 0 }
     }
   );
 
   if (stateEntry) {
     state = Object.assign({}, state, stateEntry);
-    winston.debug(state);
+    logger.debug(state);
   } else {
-    winston.debug('no state found');
+    logger.debug('no state found');
   }
 
   await client.login(token);
 }
 
 function handleClientReady () {
-  winston.info(`Logged in as ${client.user.tag}!`);
+  logger.info(`Logged in as ${client.user.tag}!`);
 
   guildId = client.channels.get(challengeChannel).guild.id;
 
@@ -237,7 +252,7 @@ async function handleDirectMessage (msg) {
       return;
     }
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
     msg.reply(getText('replyError'));
   }
 }
@@ -289,7 +304,7 @@ async function handleMessageDeletion (ev) {
       }
     });
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
   }
 }
 
@@ -321,7 +336,7 @@ function startChallenge (messageParts) {
     }));
     sendMessage(challengeChannel, getText('started'));
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
   }
 }
 
@@ -348,7 +363,7 @@ async function stopChallenge () {
       await outputAnswers(modChannel, i, true);
     }
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
   }
 }
 
@@ -360,7 +375,7 @@ async function outputCurrent () {
       await outputAnswers(modChannel, i);
     }
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
   }
 }
 
@@ -403,7 +418,7 @@ async function publishEntries () {
       status: Status.RESET
     });
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
   }
 }
 
@@ -433,7 +448,7 @@ async function updateStatus () {
       }
     });
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
   }
 }
 
@@ -481,7 +496,7 @@ async function outputCurrentAnswer (msg, query) {
       await msg.reply(delimeter + entries[i].content);
     }
   } catch (err) {
-    winston.error(err);
+    logger.error(err);
     await msg.reply(getText('replyError'));
   }
 }
@@ -558,10 +573,10 @@ function sortEntries (entries) {
 }
 
 function handleError (err) {
-  winston.error(err);
+  logger.error(err);
 }
 
 function handleUncaughtExceptions (err) {
-  winston.error(err);
+  logger.error(err);
   process.exit();
 }
