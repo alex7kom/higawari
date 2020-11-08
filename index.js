@@ -433,9 +433,9 @@ async function updateStatus () {
   try {
     if (state.status !== Status.STARTED) {
       return await client.user.setPresence({
-        game: {
+        activity: {
           name: getText('statusIdle'),
-          type: 0
+          type: 'PLAYING'
         }
       });
     }
@@ -449,9 +449,9 @@ async function updateStatus () {
     });
 
     await client.user.setPresence({
-      game: {
+      activity: {
         name: subs,
-        type: 0
+        type: 'PLAYING'
       }
     });
   } catch (err) {
