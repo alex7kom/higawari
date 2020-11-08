@@ -3,6 +3,7 @@
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;
 const shuffle = require('lodash.shuffle');
+const LRU = require('lru-cache');
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, printf } = format;
 
@@ -16,6 +17,12 @@ const moderationChannel = process.env.HIGAWARI_MOD_CH;
 const challengeChannel = process.env.HIGAWARI_CH_CH;
 
 const getText = i18n(process.env.HIGAWARI_LOCALE);
+
+const notGuildMembers = new LRU({
+  maxAge: 1000 * 60,
+  max: 1000,
+  updateAgeOnGet: false
+});
 
 const delimeter = '=======================\n';
 
@@ -142,7 +149,7 @@ async function initBot () {
 function handleClientReady () {
   logger.info(`Logged in as ${client.user.tag}!`);
 
-  guildId = client.channels.get(challengeChannel).guild.id;
+  guildId = client.channels.cache.get(challengeChannel).guild.id;
 
   updateStatus();
 }
@@ -159,7 +166,7 @@ async function handleDirectMessage (msg) {
   }
 
   // ignore non-members
-  if (!client.guilds.get(guildId).members.get(msg.author.id)) {
+  if (!(await getMemberOfGuild(msg.author.id))) {
     return;
   }
 
@@ -182,8 +189,8 @@ async function handleDirectMessage (msg) {
     };
 
     const displayName = client.guilds
-      .get(guildId).members
-      .get(msg.author.id).displayName;
+      .cache.get(guildId).members
+      .cache.get(msg.author.id).displayName;
 
     const user = await dbUsers.findOne(query);
 
@@ -356,7 +363,7 @@ async function stopChallenge () {
   sendMessage(challengeChannel, getText('stopped'));
   sendMessage(moderationChannel, getText('stoppedMod'));
 
-  const modChannel = client.channels.get(moderationChannel);
+  const modChannel = client.channels.cache.get(moderationChannel);
 
   try {
     for (let i = 1; i <= state.parts; i++) {
@@ -368,7 +375,7 @@ async function stopChallenge () {
 }
 
 async function outputCurrent () {
-  const modChannel = client.channels.get(moderationChannel);
+  const modChannel = client.channels.cache.get(moderationChannel);
 
   try {
     for (let i = 1; i <= state.parts; i++) {
@@ -406,7 +413,7 @@ function sendAlreadyStopped () {
 
 async function publishEntries () {
   try {
-    const chChannel = client.channels.get(challengeChannel);
+    const chChannel = client.channels.cache.get(challengeChannel);
 
     await chChannel.send(getText('results'));
 
@@ -548,9 +555,32 @@ async function publishAnswers (chChannel, part) {
 }
 
 function sendMessage (channelId, msg) {
-  client.channels.get(channelId)
+  client.channels.cache.get(channelId)
     .send(msg)
     .catch(handleError);
+}
+
+async function getMemberOfGuild(memberId) {
+  if (notGuildMembers.get(memberId)) {
+    logger.debug('getMemberOfGuild: not in the guild (cache)');
+
+    return null;
+  }
+
+  try {
+    return await client.guilds.cache.get(guildId).members.fetch(memberId);
+  } catch (err) {
+    if (err != null && err.httpStatus === 404) {
+      notGuildMembers.set(memberId, true);
+      logger.debug('getMemberOfGuild: not in the guild');
+
+      return null;
+    }
+
+    logger.error(err);
+
+    return null;
+  }
 }
 
 function getCommandParts (text) {

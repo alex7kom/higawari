@@ -10,8 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "babelfish": "^1.1.2",
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.4.1",
     "lodash.shuffle": "^4.2.0",
+    "lru-cache": "^6.0.0",
     "mongodb": "^3.3.3",
     "winston": "^3.2.1"
   },
