@@ -6,7 +6,7 @@ Higawari is a Discord bot for organizing challenges, i.e. translation challenges
 
 ## Requirements
 
-* Node.js 8+
+* Node.js 12+
 * MongoDB
 
 ## Installation
